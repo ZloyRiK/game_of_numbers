@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.example.gameofnumbers.R
 import com.example.gameofnumbers.databinding.FragmentChooseLevelBinding
 import com.example.gameofnumbers.databinding.FragmentWelcomeBinding
+import com.example.gameofnumbers.domain.entity.Level
 
 
 class ChooseLevelFragment : Fragment() {
@@ -25,12 +26,40 @@ class ChooseLevelFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.buttonLevelTest.setOnClickListener {
+            launchGameFragment(Level.TEST)
+        }
+
+        binding.buttonLevelEasy.setOnClickListener {
+            launchGameFragment(Level.EASY)
+        }
+
+        binding.buttonLevelNormal.setOnClickListener {
+            launchGameFragment(Level.NORMAL)
+        }
+
+        binding.buttonLevelHard.setOnClickListener {
+            launchGameFragment(Level.HARD)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    private fun launchGameFragment(level: Level){
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, GameFragment.newGameInstance(level))
+            .addToBackStack(GameFragment.NAME)
+            .commit()
+    }
+
     companion object{
+
+        const val FRAGMENT_NAME = "ChooseLevelFragment"
 
         fun newInstanceChooseLevel():ChooseLevelFragment{
             return ChooseLevelFragment()
