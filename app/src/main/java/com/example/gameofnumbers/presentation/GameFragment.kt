@@ -39,7 +39,6 @@ class GameFragment : Fragment() {
         _binding = null
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun parseArgs() {
         requireArguments().getParcelable<Level>(LEVEL_KEY)?.let {
             level = it
