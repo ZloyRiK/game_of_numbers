@@ -1,9 +1,11 @@
 package com.example.gameofnumbers.presentation
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.gameofnumbers.R
 import com.example.gameofnumbers.data.GameRepositoryImpl
@@ -38,7 +40,9 @@ class GameFragment : Fragment() {
     }
 
     private fun parseArgs() {
-        level = requireArguments().getSerializable(LEVEL_KEY) as Level
+        requireArguments().getParcelable<Level>(LEVEL_KEY)?.let {
+            level = it
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +76,7 @@ class GameFragment : Fragment() {
         fun newGameInstance(level: Level): GameFragment {
             return GameFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(LEVEL_KEY, level)
+                    putParcelable(LEVEL_KEY, level)
                 }
             }
         }

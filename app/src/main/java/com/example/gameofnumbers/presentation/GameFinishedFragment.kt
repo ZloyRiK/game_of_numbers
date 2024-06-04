@@ -1,10 +1,12 @@
 package com.example.gameofnumbers.presentation
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.gameofnumbers.databinding.FragmentGameFinishedBinding
@@ -56,8 +58,11 @@ class GameFinishedFragment : Fragment() {
         _binding = null
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun parseArgs() {
-        gameResult = requireArguments().getSerializable(RESULT_KEY) as GameResult
+        requireArguments().getParcelable<GameResult>(RESULT_KEY)?.let {
+            gameResult = it
+        }
     }
 
     private fun retryGame() {
@@ -73,7 +78,7 @@ class GameFinishedFragment : Fragment() {
         fun newGameFinishInstance(result: GameResult): GameFinishedFragment {
             return GameFinishedFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(RESULT_KEY, result)
+                    putParcelable(RESULT_KEY, result)
                 }
             }
         }
