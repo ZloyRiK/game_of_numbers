@@ -26,7 +26,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var level: Level
     private var timer: CountDownTimer? = null
 
-    private var wrongAnswers: Int = 0
     private var countOfRightAnswers: Int = 0
     private var countOfQuestions: Int = 0
 
@@ -58,6 +57,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         getGameSettings(level)
         startTimer()
         getQuestion()
+        updateProgress()
     }
 
     fun chooseAnswer(number: Int) {
@@ -101,6 +101,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun calculateOfRightAnswers(): Int {
+        if (countOfQuestions == 0) {
+            return 0
+        }
         return (countOfRightAnswers / countOfQuestions.toDouble() * 100).toInt()
         //Если ни один из делителей не привести к типу Double или Float, то всегда будет возвращаться 0 или 1
     }
