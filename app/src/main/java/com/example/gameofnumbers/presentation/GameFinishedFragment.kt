@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.example.gameofnumbers.R
 import com.example.gameofnumbers.databinding.FragmentGameFinishedBinding
 import com.example.gameofnumbers.domain.entity.GameResult
 
@@ -37,6 +38,34 @@ class GameFinishedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.emojiResult.setImageResource(
+            if (gameResult.winner) {
+                R.drawable.ic_smile
+            } else {
+                R.drawable.ic_sad
+            }
+        )
+
+        binding.tvRequiredAnswers.text = String.format(
+            getString(R.string.required_score),
+            gameResult.gameSettings.minCountOfRightAnswers
+        )
+
+        binding.tvScoreAnswers.text = String.format(
+            getString(R.string.score_answers),
+            gameResult.countOfRightAnswers
+        )
+
+        binding.tvRequiredPercentage.text = String.format(
+            getString(R.string.required_percentage),
+            gameResult.gameSettings.minPercentOfRightAnswers
+        )
+
+        binding.tvScorePercentage.text = String.format(
+            getString(R.string.score_percentage),
+            getPercentageOfRightAnswers()
+        )
+
         binding.buttonRetry.setOnClickListener {
             retryGame()
         }
@@ -58,7 +87,15 @@ class GameFinishedFragment : Fragment() {
         _binding = null
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun getPercentageOfRightAnswers() = with(gameResult){
+        if (countOfQuestions == 0) {
+            0
+        } else {
+            ((countOfRightAnswers / countOfQuestions.toDouble()) * 100).toInt()
+        }
+    }
+
+
     private fun parseArgs() {
         requireArguments().getParcelable<GameResult>(RESULT_KEY)?.let {
             gameResult = it
