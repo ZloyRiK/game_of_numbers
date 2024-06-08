@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.gameofnumbers.R
 import com.example.gameofnumbers.databinding.FragmentGameBinding
 import com.example.gameofnumbers.domain.entity.GameResult
@@ -140,17 +141,17 @@ class GameFragment : Fragment() {
     }
 
     private fun launchGameFinishFragment(gameResult: GameResult) {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, GameFinishedFragment.newGameFinishInstance(gameResult))
-            .addToBackStack(null)
-            .commit()
+        val args = Bundle().apply {
+            putParcelable(GameFinishedFragment.RESULT_KEY, gameResult)
+        }
+        findNavController().navigate(R.id.action_gameFragment_to_gameFinishedFragment, args)
     }
 
     companion object {
 
         const val NAME = "GameFragment"
 
-        private const val LEVEL_KEY = "level"
+        const val LEVEL_KEY = "level"
 
         fun newGameInstance(level: Level): GameFragment {
             return GameFragment().apply {
